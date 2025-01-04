@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\SOAPNoteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,14 +18,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Public Routes
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/login', [AuthController::class, 'login']);
+
+// Protected Routes (Authenticated Users)
 Route::middleware('auth:sanctum')->group(function () {
+    // Auth and User Routes
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-
     Route::apiResource('/users', UserController::class);
-});
 
-Route::post('/signup', [AuthController::class, 'signup']);
-Route::post('/login', [AuthController::class, 'login']);
+    // Patient Routes
+    Route::get('/patients', [PatientController::class, 'index']);
+    Route::post('/patients', [PatientController::class, 'store']);
+    Route::get('/patients/search', [PatientController::class, 'search']); // Optional Search Route
+
+    // SOAP Note Routes
+    Route::get('/patients/{patient}/soap-notes', [SOAPNoteController::class, 'index']);
+    Route::post('/patients/{patient}/soap-notes', [SOAPNoteController::class, 'store']);
+});

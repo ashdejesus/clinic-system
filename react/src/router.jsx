@@ -1,4 +1,4 @@
-import {createBrowserRouter, Navigate} from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from "./Dashboard.jsx";
 import DefaultLayout from "./components/DefaultLayout";
 import GuestLayout from "./components/GuestLayout";
@@ -7,23 +7,24 @@ import NotFound from "./views/NotFound";
 import Signup from "./views/Signup";
 import Users from "./views/Users";
 import UserForm from "./views/UserForm";
+import SOAPNotes from "./views/SOAPNotes"; // Import SOAPNotes component
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <DefaultLayout/>,
+    element: <DefaultLayout />,
     children: [
       {
         path: '/',
-        element: <Navigate to="/users"/>
+        element: <Navigate to="/users" />
       },
       {
         path: '/dashboard',
-        element: <Dashboard/>
+        element: <Dashboard />
       },
       {
         path: '/users',
-        element: <Users/>
+        element: <Users />
       },
       {
         path: '/users/new',
@@ -32,27 +33,31 @@ const router = createBrowserRouter([
       {
         path: '/users/:id',
         element: <UserForm key="userUpdate" />
+      },
+      {
+        path: '/users/:id/soap-notes', // Add SOAP Notes route here
+        element: <SOAPNotes /> // Add the SOAPNotes component for this route
       }
     ]
   },
   {
     path: '/',
-    element: <GuestLayout/>,
+    element: <GuestLayout />,
     children: [
       {
         path: '/login',
-        element: <Login/>
+        element: <Login />
       },
       {
         path: '/signup',
-        element: <Signup/>
+        element: <Signup />
       }
     ]
   },
   {
     path: "*",
-    element: <NotFound/>
+    element: <NotFound />
   }
-])
+]);
 
 export default router;
