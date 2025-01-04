@@ -1,5 +1,4 @@
-# Laravel React Example Full Stack Application
-Example Application build with Laravel and React
+# Clinic Management System Application build with Laravel and React
 
 ## Installation 
 Make sure you have environment setup properly. You will need PHP8.1, composer and Node.js.
