@@ -3,11 +3,13 @@ import Dashboard from "./Dashboard.jsx";
 import DefaultLayout from "./components/DefaultLayout";
 import GuestLayout from "./components/GuestLayout";
 import Login from "./views/Login";
+import PatientSearch from "./views/PatientSearch";
 import NotFound from "./views/NotFound";
 import Signup from "./views/Signup";
 import Users from "./views/Users";
 import UserForm from "./views/UserForm";
 import SOAPNotes from "./views/SOAPNotes"; // Import SOAPNotes component
+import PatientForm from "./views/UserForm";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <Dashboard />
+      },
+      {
+        path: '/patientsearch',
+        element: <PatientSearch />
       },
       {
         path: '/users',

@@ -32,7 +32,7 @@ export default function DefaultLayout() {
       <aside>
         <Link to="/dashboard">Dashboard</Link>
         <Link to="/users">Patients</Link>
-        <Link to="/search">Search</Link>
+        <Link to="/patientsearch">Search</Link>
       </aside>
       <div className="content">
         <header>
