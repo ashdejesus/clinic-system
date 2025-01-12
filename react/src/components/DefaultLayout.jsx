@@ -36,7 +36,7 @@ export default function DefaultLayout() {
       <div className="content">
         <header>
           <div>
-            Header
+            Patient Management <i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>
           </div>
 
           <div>
