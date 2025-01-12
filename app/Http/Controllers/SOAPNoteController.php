@@ -8,26 +8,26 @@ use Illuminate\Http\Request;
 class SOAPNoteController extends Controller
 {
     public function store(Request $request, $patientId)
-    {
-        $request->validate([
-            'subjective' => 'required|string',
-            'objective' => 'required|string',
-            'assessment' => 'required|string',
-            'plan' => 'required|string',
-        ]);
+{
+    $request->validate([
+        'subjective' => 'required|string',
+        'objective' => 'required|string',
+        'assessment' => 'required|string',
+        'plan' => 'required|string',
+    ]);
 
-        $patient = Patient::findOrFail($patientId);
+    $patient = Patient::findOrFail($patientId);
 
-        $soapNote = new SOAPNote();
-        $soapNote->patient_id = $patient->id;
-        $soapNote->subjective = $request->subjective;
-        $soapNote->objective = $request->objective;
-        $soapNote->assessment = $request->assessment;
-        $soapNote->plan = $request->plan;
-        $soapNote->save();
+    $soapNote = new SOAPNote();
+    $soapNote->patient_id = $patient->id;
+    $soapNote->subjective = $request->subjective;
+    $soapNote->objective = $request->objective;
+    $soapNote->assessment = $request->assessment;
+    $soapNote->plan = $request->plan;
+    $soapNote->save();
 
-        return response()->json(['message' => 'SOAP note added successfully'], 201);
-    }
+    return response()->json($soapNote, 201); // Return the created SOAP note
+}
 
     public function index($patientId)
     {

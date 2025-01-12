@@ -41,7 +41,7 @@ export default function Users() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Patient</h1>
+        <h1>Patients</h1>
         <Link className="btn-add" to="/users/new">Add Patient</Link>
       </div>
       <div className="card animated fadeInDown">

@@ -38,12 +38,15 @@ export default function SOAPNotes() {
 
     axiosClient
       .post(`/patients/${id}/soap-notes`, newSoapNote)
-      .then(() => {
+      .then(({ data }) => {
+        // Assuming the response contains the newly created SOAP note
+        setSoapNotes((prevNotes) => [...prevNotes, data]); // Add the new note to the existing notes
         setNotification("SOAP Note added successfully");
         setNewSoapNote({ subjective: '', objective: '', assessment: '', plan: '' });
         setErrors(null);
         setLoading(false);
-        navigate(`/users/${id}`);  // Redirect to the user's page or dashboard
+        // Optionally, you can navigate to the user's page if needed
+        // navigate(`/users/${id}`);  
       })
       .catch((err) => {
         const response = err.response;
@@ -52,7 +55,7 @@ export default function SOAPNotes() {
         }
         setLoading(false);
       });
-  };
+};
 
   return (
     <div>
@@ -71,66 +74,66 @@ export default function SOAPNotes() {
 
         {/* Display SOAP Notes */}
         <h2>Existing SOAP Notes</h2>
-        {soapNotes.length > 0 ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Subjective</th>
-                <th>Objective</th>
-                <th>Assessment</th>
-                <th>Plan</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {soapNotes.map((note) => (
-                <tr key={note.id}>
-                  <td>{note.subjective}</td>
-                  <td>{note.objective}</td>
-                  <td>{note.assessment}</td>
-                  <td>{note.plan}</td>
-                  <td>{note.created_at}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No SOAP Notes available for this patient.</p>
-        )}
+{soapNotes.length > 0 ? (
+  <table className="soap-table">
+    <thead>
+      <tr>
+        <th>Subjective</th>
+        <th>Objective</th>
+        <th>Assessment</th>
+        <th>Plan</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {soapNotes.map((note) => (
+        <tr key={note.id}>
+          <td>{note.subjective}</td>
+          <td>{note.objective}</td>
+          <td>{note.assessment}</td>
+          <td>{note.plan}</td>
+          <td>{note.created_at}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+) : (
+  <p>No SOAP Notes available for this patient.</p>
+)}
 
         {/* Add New SOAP Note Form */}
         <h2>Add New SOAP Note</h2>
         <form onSubmit={onSubmit}>
-          <div className="form-group">
+          <div className="card animated fadeInDown">
             <textarea
-              className="form-control"
+              className="card animated fadeInDown"
               placeholder="Subjective"
               value={newSoapNote.subjective}
               onChange={(e) => setNewSoapNote({ ...newSoapNote, subjective: e.target.value })}
               rows="4"
             />
           </div>
-          <div className="form-group">
+          <div className="card animated fadeInDown">
             <textarea
-              className="form-control"
+              className="card animated fadeInDown"
               placeholder="Objective"
               value={newSoapNote.objective}
               onChange={(e) => setNewSoapNote({ ...newSoapNote, objective: e.target.value })}
               rows="4"
             />
           </div>
-          <div className="form-group">
+          <div className="card animated fadeInDown">
             <textarea
-              className="form-control"
+              className="card animated fadeInDown"
               placeholder="Assessment"
               value={newSoapNote.assessment}
               onChange={(e) => setNewSoapNote({ ...newSoapNote, assessment: e.target.value })}
               rows="4"
             />
           </div>
-          <div className="form-group">
+          <div className="card animated fadeInDown">
             <textarea
-              className="form-control"
+              className="card animated fadeInDown"
               placeholder="Plan"
               value={newSoapNote.plan}
               onChange={(e) => setNewSoapNote({ ...newSoapNote, plan: e.target.value })}

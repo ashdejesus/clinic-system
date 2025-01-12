@@ -31,12 +31,13 @@ export default function DefaultLayout() {
     <div id="defaultLayout">
       <aside>
         <Link to="/dashboard">Dashboard</Link>
-        <Link to="/users">Users</Link>
+        <Link to="/users">Patients</Link>
+        <Link to="/search">Search</Link>
       </aside>
       <div className="content">
         <header>
           <div>
-            Patient Management <i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>
+            Patient Management System <i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>
           </div>
 
           <div>

@@ -50,7 +50,7 @@ export default function PatientForm() {
       axiosClient.post('/patients', patient)
         .then(() => {
           setNotification('Patient was successfully created');
-          navigate('/patients');
+          navigate('/users');
         })
         .catch((err) => {
           const response = err.response;
