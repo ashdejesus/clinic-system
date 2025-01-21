@@ -15,14 +15,13 @@ return new class extends Migration
     {
         Schema::create('soap_notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained('patients');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Foreign key to the users table
             $table->text('subjective');
             $table->text('objective');
             $table->text('assessment');
             $table->text('plan');
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('s_o_a_p_notes');
+        Schema::dropIfExists('soap_notes');
     }
 };

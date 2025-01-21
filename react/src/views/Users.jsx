@@ -5,27 +5,13 @@ import { useStateContext } from "../context/ContextProvider.jsx";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]); // To manage search results
-  const [searchQuery, setSearchQuery] = useState(""); // To track search input
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const { setNotification } = useStateContext();
 
-  // Fetch the list of users
   useEffect(() => {
     getUsers();
   }, []);
-
-  const onDeleteClick = (user) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) {
-      return;
-    }
-    axiosClient
-      .delete(`/users/${user.id}`)
-      .then(() => {
-        setNotification("User was successfully deleted");
-        getUsers();
-      });
-  };
 
   const getUsers = () => {
     setLoading(true);
@@ -34,38 +20,45 @@ export default function Users() {
       .then(({ data }) => {
         setLoading(false);
         setUsers(data.data);
-        setFilteredUsers(data.data); // Initialize filteredUsers with full data
+        setFilteredUsers(data.data);
       })
       .catch(() => {
         setLoading(false);
       });
   };
 
+  const onDeleteClick = (user) => {
+    if (!window.confirm("Are you sure you want to delete this patient?")) {
+      return;
+    }
+    axiosClient
+      .delete(`/users/${user.id}`)
+      .then(() => {
+        setNotification("Patient was successfully deleted");
+        getUsers();
+      });
+  };
+
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    // Filter users based on the query
     const filtered = users.filter(
       (user) =>
         user.name.toLowerCase().includes(query) || 
         user.id.toString().includes(query)
     );
-
     setFilteredUsers(filtered);
   };
 
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Users</h1>
-        <Link className="btn-add" to="/users/new">Add User</Link>
+        <h1>Patients</h1>
+        <Link className="btn-add" to="/users/new">Add Patient</Link>
       </div>
       <div style={{ marginBottom: "1rem" }}>
         <input
           type="text"
           placeholder="Search by name or ID"
-          value={searchQuery}
           onChange={handleSearch}
           className="search-input"
         />
@@ -78,6 +71,7 @@ export default function Users() {
               <th>Name</th>
               <th>Create Date</th>
               <th>Actions</th>
+              <th>SOAP Notes</th>
             </tr>
           </thead>
           {loading && (
@@ -98,19 +92,19 @@ export default function Users() {
                     <td>{u.name}</td>
                     <td>{u.created_at}</td>
                     <td>
-                      {/* Navigate to the SOAP Notes page for the user */}
                       <Link className="btn-edit" to={`/users/${u.id}/soap-notes`}>Add Note</Link>
-                      &nbsp;
-                      <button className="btn-delete" onClick={() => onDeleteClick(u)}>
-                        Delete
-                      </button>
+                    </td>
+                    <td>
+                      <Link className="btn-delete" to={`/users/${u.id}/soap-notes`}>
+                        View Notes
+                      </Link>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td colSpan="5" className="text-center">
-                    No users found.
+                    No patient found.
                   </td>
                 </tr>
               )}

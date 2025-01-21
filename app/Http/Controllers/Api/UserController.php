@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Http\Resources\SOAPNoteResource;
 
 class UserController extends Controller
 {
@@ -34,6 +35,8 @@ class UserController extends Controller
 
         return response(new UserResource($user) , 201);
     }
+
+    
 
     /**
      * Display the specified resource.
@@ -64,7 +67,39 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    /**
+    public function getSOAPNotes($id)
+    {
+        $user = User::findOrFail($id);
+        $notes = $user->soapNotes()->latest()->get();
+
+        return SoapNoteResource::collection($notes); // Return notes as a resource collection
+    }
+
+    public function storeSOAPNotes(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'subjective' => 'required|string',
+            'objective' => 'required|string',
+            'assessment' => 'required|string',
+            'plan' => 'required|string',
+        ]);
+
+        $user = User::findOrFail($id);
+        $soapNote = $user->soapNotes()->create($validatedData);
+
+        return response()->json(['message' => 'SOAP Note added successfully', 'soap_note' => new SoapNoteResource($soapNote)], 201);
+    }
+
+    public function destroySOAPNote($userId, $noteId)
+    {
+        $user = User::findOrFail($userId);
+        $note = $user->soapNotes()->findOrFail($noteId);
+        $note->delete();
+
+        return response()->json(['message' => 'SOAP Note deleted successfully'], 204);
+    }
+    
+        /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\User $user

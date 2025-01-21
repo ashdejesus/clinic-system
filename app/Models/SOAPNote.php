@@ -9,10 +9,10 @@ class SOAPNote extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['patient_id', 'subjective', 'objective', 'assessment', 'plan'];
+    protected $fillable = ['user_id', 'subjective', 'objective', 'assessment', 'plan'];
 
-    public function patient()
+    public function user()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(User::class);
     }
 }

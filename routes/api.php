@@ -37,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patients/search', [PatientController::class, 'search']); // Optional Search Route
 
     // SOAP Note Routes
-    Route::get('/patients/{patient}/soap-notes', [SOAPNoteController::class, 'index']);
-    Route::post('/patients/{patient}/soap-notes', [SOAPNoteController::class, 'store']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/users/{id}/soap-notes', [SoapNoteController::class, 'index']); // Get SOAP notes for a specific user
+    Route::post('/users/{id}/soap-notes', [SoapNoteController::class, 'store']); // Add a SOAP note for a specific user
+});
+
 });
