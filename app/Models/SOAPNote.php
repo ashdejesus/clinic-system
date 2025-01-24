@@ -9,7 +9,13 @@ class SOAPNote extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'subjective', 'objective', 'assessment', 'plan'];
+    protected $fillable = [
+        'subjective',
+        'objective',
+        'assessment',
+        'plan',
+        'user_id',
+    ];
 
     public function user()
     {

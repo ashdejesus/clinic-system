@@ -38,8 +38,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // SOAP Note Routes
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users/{id}/soap-notes', [SoapNoteController::class, 'index']); // Get SOAP notes for a specific user
-    Route::post('/users/{id}/soap-notes', [SoapNoteController::class, 'store']); // Add a SOAP note for a specific user
+    Route::get('/patients/{id}/soap-notes', [SOAPNoteController::class, 'index']); // Get SOAP notes for a specific user
+    Route::post('/patients/{id}/soap-notes', [SOAPNoteController::class, 'store']); // Add a SOAP note for a specific user
 });
 
 });
