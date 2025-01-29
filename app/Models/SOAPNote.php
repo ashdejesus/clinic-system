@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SOAPNote extends Model
 {
     use HasFactory;
-
+    protected $table = 's_o_a_p_notes';
     protected $fillable = [
         'subjective',
         'objective',

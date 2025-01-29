@@ -36,7 +36,8 @@ export default function DefaultLayout() {
       <div className="content">
         <header>
           <div>
-            Clinic Management System <i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>
+          <strong>Clinic Management System</strong> <i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>
+
           </div>
 
           <div>

@@ -95,7 +95,7 @@ export default function Users() {
                       <Link className="btn-edit" to={`/users/${u.id}/soap-notes`}>Add Note</Link>
                     </td>
                     <td>
-                      <Link className="btn-delete" to={`/users/${u.id}/soap-notes`}>
+                      <Link className="btn-add" to={`/users/${u.id}/soap-notes`}>
                         View Notes
                       </Link>
                     </td>

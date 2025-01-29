@@ -1,13 +1,10 @@
-// SoapNotes.jsx
-import { useEffect, useState } from "react";
-import axiosClient from "../axios-client.js";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider.jsx";
 
 export default function SoapNotes() {
   const { id } = useParams();
   const [notes, setNotes] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [newNote, setNewNote] = useState({
     subjective: "",
     objective: "",
@@ -17,21 +14,10 @@ export default function SoapNotes() {
   const { setNotification } = useStateContext();
 
   useEffect(() => {
-    getNotes();
-  }, []);
-
-  const getNotes = () => {
-    setLoading(true);
-    axiosClient
-      .get(`/users/${id}/soap-notes`)
-      .then(({ data }) => {
-        setLoading(false);
-        setNotes(data.data);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
+    // Load notes from local storage
+    const savedNotes = JSON.parse(localStorage.getItem(`soapNotes-${id}`)) || [];
+    setNotes(savedNotes);
+  }, [id]);
 
   const handleAddNote = () => {
     if (!newNote.subjective || !newNote.objective || !newNote.assessment || !newNote.plan) {
@@ -39,36 +25,27 @@ export default function SoapNotes() {
       return;
     }
 
-    axiosClient
-      .post(`/users/${id}/soap-notes`, newNote)
-      .then(() => {
-        setNotification("SOAP note added successfully");
-        setNewNote({
-          subjective: "",
-          objective: "",
-          assessment: "",
-          plan: "",
-        });
-        getNotes();
-      })
-      .catch(() => {
-        setNotification("Failed to add SOAP note");
-      });
+    const updatedNotes = [...notes, { ...newNote, id: Date.now() }];
+    setNotes(updatedNotes);
+    setNewNote({ subjective: "", objective: "", assessment: "", plan: "" });
+
+    // Save updated notes to local storage
+    localStorage.setItem(`soapNotes-${id}`, JSON.stringify(updatedNotes));
+
+    setNotification("SOAP note added successfully");
   };
 
   const handleDeleteNote = (noteId) => {
     if (!window.confirm("Are you sure you want to delete this note?")) {
       return;
     }
-    axiosClient
-      .delete(`/users/${id}/soap-notes/${noteId}`)
-      .then(() => {
-        setNotification("SOAP note deleted successfully");
-        getNotes();
-      })
-      .catch(() => {
-        setNotification("Failed to delete SOAP note");
-      });
+    const updatedNotes = notes.filter((note) => note.id !== noteId);
+    setNotes(updatedNotes);
+
+    // Update local storage
+    localStorage.setItem(`soapNotes-${id}`, JSON.stringify(updatedNotes));
+
+    setNotification("SOAP note deleted successfully");
   };
 
   return (
@@ -99,30 +76,41 @@ export default function SoapNotes() {
           onChange={(e) => setNewNote({ ...newNote, plan: e.target.value })}
           placeholder="Plan"
         />
-        <button className="btn-add"  onClick={handleAddNote}>Save Note</button>
+        <button className="btn-add" onClick={handleAddNote}>Save Note</button>
       </div>
+      
       <div className="card animated fadeInDown">
-        {loading ? (
-          <p>Loading...</p>
+        {notes.length === 0 ? (
+          <p>No SOAP notes found.</p>
         ) : (
-          <ul>
-            {notes.length > 0 ? (
-              notes.map((note) => (
-                <li key={note.id}>
-                  <strong>Subjective:</strong> {note.subjective} <br />
-                  <strong>Objective:</strong> {note.objective} <br />
-                  <strong>Assessment:</strong> {note.assessment} <br />
-                  <strong>Plan:</strong> {note.plan} <br />
-                  <button onClick={() => handleDeleteNote(note.id)}>Delete</button>
-                </li>
-              ))
-            ) : (
-              <p>No SOAP notes found.</p>
-            )}
-          </ul>
+          <table>
+            <thead>
+              <tr>
+                <th>Subjective</th>
+                <th>Objective</th>
+                <th>Assessment</th>
+                <th>Plan</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {notes.map((note) => (
+                <tr key={note.id}>
+                  <td>{note.subjective}</td>
+                  <td>{note.objective}</td>
+                  <td>{note.assessment}</td>
+                  <td>{note.plan}</td>
+                  <td>
+                    <button className="btn-delete" onClick={() => handleDeleteNote(note.id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
-      <Link  className="btn-add"  to="/users">Back to Patients</Link>
+
+      <Link className="btn-add" to="/users">Back to Patients</Link>
     </div>
   );
 }

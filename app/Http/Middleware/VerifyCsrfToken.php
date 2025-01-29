@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        '/users/${id}/soap-notes',  // Exclude SOAP notes endpoints
+        '/api/*',               // Exclude all API routes
     ];
 }
