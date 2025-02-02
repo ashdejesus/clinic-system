@@ -30,6 +30,14 @@ export default function PatientForm() {
     }
   }, [id]);
 
+  const savePatientLocally = () => {
+    const savedPatients = JSON.parse(localStorage.getItem("patients")) || [];
+    const newPatient = { ...patient, id: Date.now() }; // Assign unique ID
+    localStorage.setItem("patients", JSON.stringify([...savedPatients, newPatient]));
+    setNotification("Patient was successfully created");
+    navigate("/users");
+  };
+
   const onSubmit = (ev) => {
     ev.preventDefault();
     setErrors(null);
@@ -50,7 +58,7 @@ export default function PatientForm() {
       axiosClient.post('/patients', patient)
         .then(() => {
           setNotification('Patient was successfully created');
-          navigate('/users');
+          navigate('/patients');
         })
         .catch((err) => {
           const response = err.response;
@@ -93,7 +101,8 @@ export default function PatientForm() {
               onChange={(ev) => setPatient({ ...patient, contact_number: ev.target.value })}
               placeholder="Contact Number"
             />
-            <button className="btn">Save</button>
+            <button className="btn" type="submit">Save</button>
+            <button className="btn" type="button" onClick={savePatientLocally}>Patient</button>
           </form>
         )}
       </div>
